@@ -33,9 +33,12 @@ public class TopFinder {
         .forEach(i -> {
           if (top.size() < n) {
             top.add(i);
-          } else if (i > top.last()) {
-            top.remove(top.last());
-            top.add(i);
+          } else {
+            int last = top.last();
+            if (i > last) {
+              top.remove(last);
+              top.add(i);
+            }
           }
         });
     return new ArrayList<>(top);
