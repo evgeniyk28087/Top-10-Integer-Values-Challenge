@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Stream;
 
 public class TopFinder {
@@ -26,22 +24,27 @@ public class TopFinder {
     if (n == 0) {
       return Collections.emptyList();
     }
-    SortedSet<Integer> top = new TreeSet<>(Comparator.reverseOrder());
+    List<Integer> top = new ArrayList<>(n);
     input
         .sequential()
         .filter(Objects::nonNull)
         .forEach(i -> {
           if (top.size() < n) {
-            top.add(i);
+            addAndSort(top, i);
           } else {
-            int last = top.last();
+            int last = top.get(n - 1);
             if (i > last) {
-              top.remove(last);
-              top.add(i);
+              top.remove(n - 1);
+              addAndSort(top, i);
             }
           }
         });
-    return new ArrayList<>(top);
+    return top;
+  }
+
+  private void addAndSort(List<Integer> top, int i) {
+    top.add(i);
+    top.sort(Comparator.reverseOrder());
   }
 
   private void checkArguments(Stream<Integer> input, int n) {
